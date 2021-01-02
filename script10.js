@@ -95,3 +95,106 @@ const sayHi = function (name) {
 */
 
 /* 04. FUNCTIONS RETURNING OTHER FUNCTIONS */
+/*
+const greet = function (greeting) {
+  return function (name) {
+    console.log(`${greeting} ${name}`);
+  };
+};
+
+const greeterHey = greet('Hey');
+greeterHey('Federico');
+
+greet('Hello')('Federico'); // La prima parte "greet(..) è una funzione, non un valore!"
+
+const greetArr = greeting => name => console.log(`${greeting} ${name}`); // con arrows
+*/
+
+// 05. THE CALL AND APPLY METHODS
+/*
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+  },
+};
+
+lufthansa.book(239, 'Federico Giovannini');
+lufthansa.book(369, 'Tizio Caio');
+console.log(lufthansa);
+
+const eurowings = {
+  airline: 'Eurowings',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+const book = lufthansa.book; // invece che ripetere la stessa funzione tutte le volte, possiamo assegnarla prendendola dalla stringa..però il "this" per una regular function è "undefined"!
+// Bisogna dire esplicitamente quale è il valore del THIS con CALL o APPLY
+book.call(eurowings, 23, 'Sarah William'); // il primo parametro è il valore del THIS
+console.log(eurowings);
+book.call(lufthansa, 230, 'Mary Cooper');
+console.log(lufthansa);
+
+// Apply method (non più usato molto): come il Call method ma non riceve una lista di argomenti dopo la variabile THIS ma un array di argomenti:
+const flightData = [583, 'George Cooper'];
+book.apply(eurowings, flightData);
+console.log(eurowings);
+
+// invece di usare Apply si usa Call + the spread operator:
+book.call(eurowings, ...flightData); // esattamente uguale alla riga 145
+console.log(eurowings);
+*/
+
+// 06. THE BIND METHOD - Allows to manually set the This keyword forevery function call
+// The difference is that BIND does not call immediately the function, instead it returns a new function with this bound this keyword
+
+const lufthansa = {
+  airline: 'Lufthansa',
+  iataCode: 'LH',
+  bookings: [],
+  book(flightNum, name) {
+    console.log(
+      `${name} booked a seat on ${this.airline} flight ${this.iataCode}${flightNum}`
+    );
+    this.bookings.push({ flight: `${this.iataCode}${flightNum}`, name });
+  },
+};
+const book = lufthansa.book;
+const eurowings = {
+  airline: 'Eurowings',
+  iataCode: 'EW',
+  bookings: [],
+};
+
+const bookEW = book.bind(eurowings);
+const bookLH = book.bind(lufthansa);
+
+bookEW(234, 'Steven Williams');
+
+// PARTIAL APPLICATION: We can use the BIND fuction to create a function with other specific parameters (ex. a specific flight)
+const bookEW23 = book.bind(eurowings, 23);
+bookEW23('Federico Giovannini'); // basta il nome perché il numero del volo è stato già fissato prima!
+
+// WIth Event Listeners
+lufthansa.planes = 300; // THe company has 300 planes
+lufthansa.buyPlane = function () {
+  this.planes++;
+  console.log(this.planes);
+};
+
+document
+  .querySelector('.buy')
+  .addEventListener('click', lufthansa.buyPlane.bind(lufthansa)); // We have to bind the THIS keyword
+
+// Partial application
+const addTax = (rate, value) => value + value * rate;
+console.log(addTax(0.22, 200));
+
+const addVAT = addTax.bind(null, 0.23); // we want to pre-set the VAT value, skippiamo the THIS keyword con "null"
+console.log(addVAT(200));
