@@ -65,3 +65,33 @@ checkIn(flight, federico);
 console.log(federico);
 */
 // JS does not have passing by reference, only passing by VALUE
+
+/* 03. FUNCTIONS ACCEPTING CALLBACK FUNCTIONS */
+/*
+const oneWord = function (str) {
+  return str.replace(/ /g, '').toLowerCase(); // takes any string and return one without spaces and all lower cases
+};
+
+const upperFirstWord = function (str) {
+  const [first, ...others] = str.split(' ');
+  return [first.toUpperCase(), ...others].join(' ');
+};
+
+// Higher-order function = Function with another function as parameter
+const transformer = function (str, fn) {
+  console.log(`Original string: ${str}`);
+  console.log(`Transformed string: ${fn(str)}`);
+
+  console.log(`Transformedby: ${fn.name}`);
+};
+
+transformer('JavaScript is the best!', upperFirstWord);
+transformer('JavaScript is the best!', oneWord);
+
+const sayHi = function (name) {
+  console.log(`Hi ${name}!`);
+};
+['Federico', 'Tizio', 'Caio'].forEach(sayHi); // Callback function: sayHi
+*/
+
+/* 04. FUNCTIONS RETURNING OTHER FUNCTIONS */
